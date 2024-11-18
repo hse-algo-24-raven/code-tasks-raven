@@ -28,7 +28,12 @@ def fibonacci_iter(n: int) -> int:
     return n_list[-1]
 
 
-def check(n):
+def check(n:object) -> bool:
+    """Проверяет n на условие положительного целого числа
+    :param n: Проверяемое число
+    :return: Результат проверки (True/False)
+    """
+
     if not(isinstance(n, int)) or n < 1:
         return False
     return True
