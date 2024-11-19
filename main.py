@@ -8,7 +8,7 @@ def fibonacci_rec(n: int) -> int:
     :param n: порядковый номер числа Фибоначчи
     :return: число Фибоначчи
     """
-    pass
+    return (fibonacci_rec(n - 1) + fibonacci_rec(n - 2)) if n > 2 else 1
 
 
 def fibonacci_iter(n: int) -> int:
@@ -18,7 +18,12 @@ def fibonacci_iter(n: int) -> int:
     :param n: порядковый номер числа Фибоначчи
     :return: число Фибоначчи
     """
-    pass
+    prefix_fibonacci_list = [1] * max(n, 1)  # Как минимум 1 элемент
+    for i in range(2, n):  # Если n <= 2, тогда тело цикла пропускается
+        prefix_fibonacci_list[i] = (
+            prefix_fibonacci_list[i - 1] + prefix_fibonacci_list[i - 2]
+        )
+    return prefix_fibonacci_list[-1]
 
 
 def fibonacci(n: int) -> int:
@@ -27,7 +32,13 @@ def fibonacci(n: int) -> int:
     :param n: порядковый номер числа Фибоначчи
     :return: число Фибоначчи
     """
-    pass
+    current_element = previous_element = pre_previous_element = 1
+
+    for i in range(2, n):  # Если n <= 2, тогда тело цикла пропускается
+        current_element = previous_element + pre_previous_element
+        pre_previous_element = previous_element
+        previous_element = current_element
+    return current_element
 
 
 def main():
@@ -39,7 +50,7 @@ def main():
     print(fibonacci_iter(n))
 
     print(f"\nВычисление {n} числа Фибоначчи итеративно без использования массива:")
-    print(fibonacci_iter(n))
+    print(fibonacci(n))
 
 
 if __name__ == "__main__":
