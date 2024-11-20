@@ -1,7 +1,9 @@
+from profilehooks import profile
+
 def fibonacci_rec(n: int) -> int:
     if n == 0:
         return 0
-    elif n == 1:
+    elif n <= 2:
         return 1
     else:
         return fibonacci_rec(n - 1) + fibonacci_rec(n - 2)
@@ -13,11 +15,16 @@ def fibonacci_iter(n: int) -> int:
     return fibonacci_m[n - 1]
 
 def fibonacci(n: int) -> int:
-    root_5 = 5 ** 0.5
-    phi = ((1 + root_5) / 2)
-    a = ((phi ** n) - ((-phi) ** -n)) / root_5
-    return round(a)
-
+    fibonacci_a = 1
+    fibonacci_b = 1
+    fibonacci_c = 0
+    if n <= 2:
+        return 1
+    for i in range(2, n):
+        fibonacci_c = fibonacci_a + fibonacci_b
+        fibonacci_a = fibonacci_b
+        fibonacci_b = fibonacci_c
+    return fibonacci_c
 
 def main():
     n = 35
