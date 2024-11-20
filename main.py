@@ -1,15 +1,17 @@
+from collections import deque
+
 def rabbits(target_month: int, rabbit_lifetime: int) -> int:
-    """Возвращает количество пар кроликов в популяции на заданный месяц.
-    В начальный момент времени имеется одна пара кроликов. Начиная со второго
-    месяца после рождения пара кроликов производит новую пару каждый месяц.
-    После достижения предельного возраста кролики умирают.
+    if target_month <= 2:
+        return 1
+    
+    rabbits_age = deque([0] * rabbit_lifetime)
+    rabbits_age[0] = 1
+    rabbits_age[1] = 1
+    
+    for i in range(2, target_month):
+        rabbits_age.appendleft(rabbits_age[0] + rabbits_age[1] - rabbits_age.pop())
 
-    :param target_month: месяц, на который нужно рассчитать количество пар кроликов.
-    :param rabbit_lifetime: продолжительность жизни каждого кролика, не менее 2 месяцев.
-    :return: количество пар кроликов
-    """
-    pass
-
+    return (rabbits_age[0])
 
 def main():
     n = 35
