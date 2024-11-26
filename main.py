@@ -20,7 +20,7 @@ def get_random_matrix_and_det(size):
     if isinstance(size, int) and isinstance(det, int) and size <= 0:
         raise Exception("Некорректный тип данных или размер матрицы")
     if size == 1:
-        return [[det]], det
+        return {MATRIX: [[det]], DET: det}
 
     while True:
         matrix = [[0] * size for i in range(size)]
