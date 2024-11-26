@@ -6,7 +6,7 @@ MATRIX = "matrix"
 DET = "determinant"
 
 
-def get_random_matrix_and_det(order):
+def get_random_matrix_and_det(size):
     """Генерирует случайную квадратную целочисленную матрицу с заранее
     известным значением определителя.
 
