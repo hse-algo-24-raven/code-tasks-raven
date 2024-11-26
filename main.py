@@ -5,7 +5,7 @@ MATRIX = "matrix"
 DET = "determinant"
 
 
-def get_matrix(size):
+def get_random_matrix_and_det(size):
     det = random.randint(-1000, 1000)
 
     if isinstance(size, int) and isinstance(det, int) and size <= 0:
