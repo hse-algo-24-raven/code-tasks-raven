@@ -2,6 +2,9 @@ def validate(matrix: list[list[int]]):
     if matrix is None:
         raise Exception("Параметр не является трехдиагональной матрицей")
 
+    if type(matrix) is not list:
+        raise Exception("Параметр не является трехдиагональной матрицей")
+
     n = len(matrix)
 
     if n == 0:
@@ -33,20 +36,28 @@ def get_tridiagonal_determinant(matrix: list[list[int]]) -> int:
     n = len(matrix)
 
     #Определитель 1x1 матрицы
+    det_prev_1 = matrix[0][0]
+
     if n == 1:
-        return matrix[0][0]
+        return det_prev_1
 
-    #Создаём массив для хранения подопределителей
-    det = [0] * n
-    det[0] = matrix[0][0]  #Определитель 1x1
-    det[1] = matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1]  #Определитель 2x2
+    #Определитель 2x2
+    det_prev_2 = (matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1])
 
-    #Вычисляем определитель
+    if n == 2:
+        return det_prev_2
+
+    #Определитель для матриц размером 3x3 и больше
+    a = matrix[0][0]
+    b = matrix[0][1]
+    c = matrix[1][0]
     for i in range(2, n):
-        det[i] = (matrix[i][i] * det[i - 1]
-                  - matrix[i][i - 1] * matrix[i - 1][i] * det[i - 2])
+        det_current = a * det_prev_2 - b * c * det_prev_1
 
-    return det[n - 1]
+        det_prev_1 = det_prev_2
+        det_prev_2 = det_current
+
+    return det_prev_2
 
 
 def main():
