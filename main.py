@@ -42,13 +42,12 @@ def generate_permutations(items: list[Any]) -> list[list[Any]]:
     queue.append([items[0]] if len(items) != 0 else [])
 
     for i in range(1, len(items)):
-        n = len(queue)
-        for j in range(n):
-            a = queue.popleft()
-            b = items[i]
+        for _ in range(len(queue)):
+            current_node_value = queue.popleft()
+            current_array_value = items[i]
 
-            for k in range(len(a) + 1):
-                queue.append(a[:k] + [b] + a[k:])
+            for j in range(len(current_node_value) + 1):
+                queue.append(current_node_value[:j] + [current_array_value] + current_node_value[j:])
     return list(queue)
 
 
