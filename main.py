@@ -1,6 +1,12 @@
 from collections import deque
 from typing import Any
 
+NOT_LIST_VALUE_TEMPL = "Параметр {0} не является списком"
+"""Шаблон сообщения об ошибке при условии, что параметр не является списком"""
+
+LIST_HAS_DUPLICATES = "Список элементов содержит дубликаты"
+"""Сообщение об ошибке при условии, что в переданном списке был найден дубликат"""
+
 
 def is_list_have_duplicates(array: list[Any]):
     """Проверка на то находится ли в массиве какой-либо дубликат
@@ -10,7 +16,7 @@ def is_list_have_duplicates(array: list[Any]):
     """
 
     if not isinstance(array, list):
-        raise TypeError("Параметр array не является списком")
+        raise TypeError(NOT_LIST_VALUE_TEMPL.format("array"))
 
     dict_was_encountered = dict()
     for value in array:
@@ -30,10 +36,10 @@ def generate_permutations(items: list[Any]) -> list[list[Any]]:
     """
 
     if not isinstance(items, list):
-        raise TypeError("Параметр items не является списком")
+        raise TypeError(NOT_LIST_VALUE_TEMPL.format("items"))
 
     if is_list_have_duplicates(items):
-        raise ValueError("Список элементов содержит дубликаты")
+        raise ValueError(LIST_HAS_DUPLICATES)
 
     if len(items) == 0:
         return []
@@ -47,7 +53,11 @@ def generate_permutations(items: list[Any]) -> list[list[Any]]:
             current_array_value = items[i]
 
             for j in range(len(current_node_value) + 1):
-                queue.append(current_node_value[:j] + [current_array_value] + current_node_value[j:])
+                queue.append(
+                    current_node_value[:j]
+                    + [current_array_value]
+                    + current_node_value[j:]
+                )
     return list(queue)
 
 
