@@ -8,18 +8,18 @@ LIST_HAS_DUPLICATES = "Список элементов содержит дубл
 """Сообщение об ошибке при условии, что в переданном списке был найден дубликат"""
 
 
-def is_list_have_duplicates(array: list[Any]):
+def is_list_have_duplicates(items: list[Any]):
     """Проверка на то находится ли в массиве какой-либо дубликат
     :param array: список элементов
     :raise TypeError: если параметр array не является списком
     :return: True, если есть дубликат в списке, иначе False
     """
 
-    if not isinstance(array, list):
-        raise TypeError(NOT_LIST_VALUE_TEMPL.format("array"))
+    if not isinstance(items, list):
+        raise TypeError(NOT_LIST_VALUE_TEMPL.format("items"))
 
     dict_was_encountered = dict()
-    for value in array:
+    for value in items:
         if value in dict_was_encountered and dict_was_encountered[value]:
             return True
         dict_was_encountered[value] = True
@@ -35,9 +35,7 @@ def generate_permutations(items: list[Any]) -> list[list[Any]]:
     множества
     """
 
-    if not isinstance(items, list):
-        raise TypeError(NOT_LIST_VALUE_TEMPL.format("items"))
-
+    # Если items не список, то вызовется исключение из функции ниже
     if is_list_have_duplicates(items):
         raise ValueError(LIST_HAS_DUPLICATES)
 
@@ -45,18 +43,16 @@ def generate_permutations(items: list[Any]) -> list[list[Any]]:
         return []
 
     queue = deque()
-    queue.append([items[0]] if len(items) != 0 else [])
+    queue.append([items[0]])
 
     for i in range(1, len(items)):
         for _ in range(len(queue)):
-            current_node_value = queue.popleft()
-            current_array_value = items[i]
+            current_permutation = queue.popleft()
+            current_item = items[i]
 
-            for j in range(len(current_node_value) + 1):
+            for j in range(len(current_permutation) + 1):
                 queue.append(
-                    current_node_value[:j]
-                    + [current_array_value]
-                    + current_node_value[j:]
+                    current_permutation[:j] + [current_item] + current_permutation[j:]
                 )
     return list(queue)
 
