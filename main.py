@@ -16,6 +16,9 @@ def generate_permutations(items: list[Any]) -> list[list[Any]]:
     """
     __validate(items)
     lenght = len(items)
+    if lenght == 0:
+        return []
+
     items = sorted(items)
     result = []
     total_permutations = __factorial(lenght)
