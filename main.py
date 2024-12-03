@@ -10,6 +10,19 @@ NEGATIVE_VALUE_TEMPL = "Параметр {0} отрицательный"
 N_LESS_THAN_K_ERROR_MSG = "Параметр n меньше чем k"
 """Сообщение об ошибке при значении параметра n меньше чем k"""
 
+def validate_path_length(length):
+    if length is None:
+        raise ValueError(PATH_LENGTH_ERROR_MSG)
+    if not isinstance(length, int):
+        raise ValueError(PATH_LENGTH_ERROR_MSG)
+    if isinstance(length, bool): 
+        raise ValueError(PATH_LENGTH_ERROR_MSG)
+    if length <= 0:
+        raise ValueError(PATH_LENGTH_ERROR_MSG)
+    
+    
+    
+    
 
 def get_triangle_path_count(length: int) -> int:
     """Вычисляет количество замкнутых маршрутов заданной длины между тремя
@@ -20,7 +33,41 @@ def get_triangle_path_count(length: int) -> int:
     числом.
     :return: Количество маршрутов.
     """
-    pass
+    validate_path_length(length)
+    return path_to_a(length)
+
+def path_to_a(n):
+    if n == 0:
+        return 1
+    return path_to_b(n-1) + path_to_c(n-1)
+
+def path_to_b(n):
+    if n == 0:
+        return 0
+    return path_to_a(n-1) + path_to_c(n-1)
+
+def path_to_c(n):
+    if n == 0:
+        return 0
+    return path_to_a(n-1) + path_to_b(n-1)
+
+
+def validate_binomial_parameters(n, k):
+
+    if not isinstance(n, int):
+        raise ValueError(NOT_INT_VALUE_TEMPL.format("n"))
+    
+    if not isinstance(k, int):
+        raise ValueError(NOT_INT_VALUE_TEMPL.format("k"))
+    
+    if k < 0:
+        raise ValueError(NEGATIVE_VALUE_TEMPL.format("k"))
+    
+    if n < 0:
+        raise ValueError(NEGATIVE_VALUE_TEMPL.format("n"))
+    
+    if n < k:
+        raise ValueError(N_LESS_THAN_K_ERROR_MSG)
 
 
 def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
@@ -32,8 +79,28 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
     числами или значение параметра n меньше чем k.
     :return: Значение биномиального коэффициента.
     """
-    pass
+    validate_binomial_parameters(n, k)
 
+    if use_rec:
+        return binomial_recursive(n, k)
+    return binomial_iterative(n, k)
+
+def binomial_recursive(n, k):
+    if k == 0 or n == k:
+        return 1
+    return binomial_recursive (n-1, k) + binomial_recursive(n - 1, k - 1)
+
+
+def binomial_iterative(n, k):
+    if k == 0 or n == k:
+        return 1
+    
+    coefficient = 1
+    for i in range(1, k + 1):
+        coefficient *= n - (i - 1) 
+        coefficient //= i
+
+    return coefficient
 
 def main():
     n = 10

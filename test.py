@@ -26,7 +26,7 @@ class TestTrianglePath(unittest.TestCase):
                 ValueError,
                 PATH_LENGTH_ERROR_MSG,
                 get_triangle_path_count,
-                incorrect_val,
+                incorrect_val
             )
 
     def test_triangle_path(self):
