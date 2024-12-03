@@ -1,7 +1,7 @@
 from typing import Any
 
 
-class Config():
+class ErrorMessages():
     ERROR_ITEMS_NOT_IS_LIST = "Параметр items не является списком"
     ERROR_DUPLICATE_ITEMS = "Список элементов содержит дубликаты"
 
@@ -25,20 +25,20 @@ def generate_permutations(items: list[Any]) -> list[list[Any]]:
 
     for _ in range(total_permutations):
         result.append(items[:])
-        k = lenght - 2
+        pivot_index = lenght - 2
 
-        while k >= 0 and items[k] >= items[k + 1]:
-            k -= 1
+        while pivot_index >= 0 and items[pivot_index] >= items[pivot_index + 1]:
+            pivot_index -= 1
 
-        if k < 0:
+        if pivot_index < 0:
             break
 
         left = lenght - 1
-        while items[k] >= items[left]:
+        while items[pivot_index] >= items[left]:
             left -= 1
 
-        items[k], items[left] = items[left], items[k]
-        items = items[:k + 1] + items[k + 1:][::-1]
+        items[pivot_index], items[left] = items[left], items[pivot_index]
+        items = items[:pivot_index + 1] + items[pivot_index + 1:][::-1]
 
     return result
 
@@ -56,17 +56,17 @@ def stupid_solution(items: list[Any]) -> list[list[Any]]:
     length = len(items)
     if length == 0:
         return []
-    x = [0 for _ in range(length)]
+    last_number = [0 for _ in range(length)]
     result = []
     for i in range(length ** length):
 
-        while length in x:
-            index = x.index(length)
-            x[index - 1] += 1
-            x[index] = 0
-        if len(x) == len(set(x)):
-            result.append([items[_] for _ in x])
-        x[-1] += 1
+        while length in last_number:
+            index = last_number.index(length)
+            last_number[index - 1] += 1
+            last_number[index] = 0
+        if len(last_number) == len(set(last_number)):
+            result.append([items[_] for _ in last_number])
+        last_number[-1] += 1
 
     return result
 
@@ -80,9 +80,9 @@ def __validate(array: list[Any]) -> None:
     :return: функция ничего не возвращает, если все ОК, то работа программы продолжится
     """
     if not isinstance(array, list):
-        raise TypeError(Config.ERROR_ITEMS_NOT_IS_LIST)
+        raise TypeError(ErrorMessages.ERROR_ITEMS_NOT_IS_LIST)
     if len(set(array)) != len(array):
-        raise ValueError(Config.ERROR_DUPLICATE_ITEMS)
+        raise ValueError(ErrorMessages.ERROR_DUPLICATE_ITEMS)
 
 
 def __factorial(n: int) -> int:
