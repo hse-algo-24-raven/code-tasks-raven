@@ -44,22 +44,23 @@ def generate_permutations(items: list[Any]) -> list[list[Any]]:
     
 
     result_permutations = []
-    additional_arr = [0] * items_length 
+    indices_tracker = [0] * items_length 
     result_permutations.append(items[:])
 
     begin = 0
 
+
     while begin < items_length:
-        if additional_arr[begin] < begin:
+        if indices_tracker[begin] < begin:
             if begin % 2 == 0:
                     items[0], items[begin] = items[begin], items[0]
             else:
-                    items[additional_arr[begin]], items[begin] = items[begin], items[additional_arr[begin]]
+                    items[indices_tracker[begin]], items[begin] = items[begin], items[indices_tracker[begin]]
             result_permutations.append(items[:])
-            additional_arr[begin] += 1
+            indices_tracker[begin] += 1
             begin = 0
         else:
-            additional_arr[begin] = 0
+            indices_tracker[begin] = 0
             begin += 1
 
     return result_permutations
