@@ -88,7 +88,8 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
 def binomial_recursive(n, k):
     if k == 0 or n == k:
         return 1
-    return binomial_recursive (n-1, k) + binomial_recursive(n - 1, k - 1)
+    
+    return n/k * binomial_recursive(n - 1, k - 1)
 
 
 def binomial_iterative(n, k):
