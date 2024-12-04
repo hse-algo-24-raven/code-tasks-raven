@@ -1,7 +1,7 @@
 STR_LENGTH_ERROR_MSG = "Длина строки должна быть целым положительным числом"
 """Сообщение об ошибке при некорректном значении параметра Длина строки"""
 
-NOT_INT_VALUE_TEMPL = "Параметр {0} Не является целым числом"
+NOT_INT_VALUE_TEMPL = "Параметр {0} не является целым числом"
 """Шаблон сообщения об ошибке при нечисловом значении параметра"""
 
 NEGATIVE_VALUE_TEMPL = "Параметр {0} отрицательный"
@@ -9,6 +9,8 @@ NEGATIVE_VALUE_TEMPL = "Параметр {0} отрицательный"
 
 N_LESS_THAN_K_ERROR_MSG = "Параметр n меньше чем k"
 """Сообщение об ошибке при значении параметра n меньше чем k"""
+
+
 
 def generate_strings(length: int) -> list[str]:
     """Возвращает строки заданной длины, состоящие из 0 и 1, где никакие
@@ -44,17 +46,17 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
     числами или значение параметра n меньше чем k.
     :return: Значение биномиального коэффициента.
     """
-    if not isinstance(n, int) or not isinstance(k, int) or n < 0 or k < 0:
-        if not isinstance(n, int):
-            raise ValueError(NOT_INT_VALUE_TEMPL.format("n"))
-        if not isinstance(k, int):
-            raise ValueError(NOT_INT_VALUE_TEMPL.format("k"))
-        if n < 0:
-            raise ValueError(NEGATIVE_VALUE_TEMPL.format("n"))
-        if k < 0:
-            raise ValueError(NEGATIVE_VALUE_TEMPL.format("k"))
+    if not isinstance(n, int):
+        raise ValueError(NOT_INT_VALUE_TEMPL.format("n"))
+    if not isinstance(k, int):
+        raise ValueError(NOT_INT_VALUE_TEMPL.format("k"))
+    if n < 0:
+        raise ValueError(NEGATIVE_VALUE_TEMPL.format("n"))
+    if k < 0:
+        raise ValueError(NEGATIVE_VALUE_TEMPL.format("k"))
     if k > n:
         raise ValueError(N_LESS_THAN_K_ERROR_MSG)
+
     if use_rec:
         """ Рекурсивный способ """
         if k == 0 or k == n:
