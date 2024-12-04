@@ -37,7 +37,6 @@ class TestTrianglePath(unittest.TestCase):
                 get_triangle_path_count(i), TestTrianglePath.__calculate_result(i)
             )
 
-
 class TestBinomialCoefficient(unittest.TestCase):
     def test_n_less_than_k(self):
         """Проверяет выброс исключения при значении параметра n меньше чем k"""
