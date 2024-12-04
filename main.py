@@ -20,7 +20,7 @@ def generate_strings(length: int) -> list[str]:
     :return: Список строк.
     """
     if not isinstance(length, int) or length <= 0:
-        raise ValueError("Длина строки должна быть целым положительным числом")
+        raise ValueError(STR_LENGTH_ERROR_MSG)
 
     if length == 1:
         return ["0", "1"]
@@ -46,15 +46,15 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
     """
     if not isinstance(n, int) or not isinstance(k, int) or n < 0 or k < 0:
         if not isinstance(n, int):
-            raise ValueError(f"Параметр n не является целым числом")
+            raise ValueError(NOT_INT_VALUE_TEMPL.format("n"))
         if not isinstance(k, int):
-            raise ValueError(f"Параметр k не является целым числом")
+            raise ValueError(NOT_INT_VALUE_TEMPL.format("k"))
         if n < 0:
-            raise ValueError(f"Параметр n отрицательный")
+            raise ValueError(NEGATIVE_VALUE_TEMPL.format("n"))
         if k < 0:
-            raise ValueError(f"Параметр k отрицательный")
+            raise ValueError(NEGATIVE_VALUE_TEMPL.format("k"))
     if k > n:
-        raise ValueError("Параметр n меньше чем k")
+        raise ValueError(N_LESS_THAN_K_ERROR_MSG)
     if use_rec:
         """ Рекурсивный способ """
         if k == 0 or k == n:
