@@ -10,7 +10,6 @@ NEGATIVE_VALUE_TEMPL = "Параметр {0} отрицательный"
 N_LESS_THAN_K_ERROR_MSG = "Параметр n меньше чем k"
 """Сообщение об ошибке при значении параметра n меньше чем k"""
 
-
 def generate_strings(length: int) -> list[str]:
     """Возвращает строки заданной длины, состоящие из 0 и 1, где никакие
     два нуля не стоят рядом.
@@ -20,8 +19,21 @@ def generate_strings(length: int) -> list[str]:
     числом.
     :return: Список строк.
     """
-    pass
+    if not isinstance(length, int) or length <= 0:
+        raise ValueError(STR_LENGTH_ERROR_MSG)
 
+    if length == 1:
+        return ["0", "1"]
+
+    prev = generate_strings(length - 1)
+    result = []
+    for s in prev:
+        if s[-1] == "0":
+            result.append(s + "1")
+        else:
+            result.append(s + "0")
+            result.append(s + "1")
+    return result
 
 def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
     """Вычисляет биномиальный коэффициент из n по k.
@@ -32,7 +44,22 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
     числами или значение параметра n меньше чем k.
     :return: Значение биномиального коэффициента.
     """
-    pass
+    if not isinstance(n, int) or not isinstance(k, int) or n < 0 or k < 0:
+        raise ValueError(STR_LENGTH_ERROR_MSG)
+    if k > n:
+        raise ValueError(N_LESS_THAN_K_ERROR_MSG)
+    if use_rec:
+        """ Рекурсивный способ """
+        if k == 0 or k == n:
+            return 1
+        return binomial_coefficient(n - 1, k - 1) + binomial_coefficient(n - 1, k)
+    else:
+        """ Итеративный способ """
+        k = min(k, n - k)
+        c = 1
+        for i in range(k):
+            c = c * (n - i) // (i + 1)
+        return c
 
 
 def main():
