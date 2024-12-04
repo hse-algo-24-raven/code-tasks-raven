@@ -21,6 +21,8 @@ def generate_strings(length: int) -> list[str]:
     числом.
     :return: Список строк.
     """
+    if(isinstance(length, bool)):
+        raise ValueError(STR_LENGTH_ERROR_MSG)
     if not isinstance(length, int) or length <= 0:
         raise ValueError(STR_LENGTH_ERROR_MSG)
 
