@@ -10,7 +10,18 @@ NEGATIVE_VALUE_TEMPL = "Параметр {0} отрицательный"
 N_LESS_THAN_K_ERROR_MSG = "Параметр n меньше чем k"
 """Сообщение об ошибке при значении параметра n меньше чем k"""
 
+def generate_strings_ending_with_0(length: int) -> list[str]:
+    if length == 1:
+        return ["0"]
+    strings_with_1 = generate_strings_ending_with_1(length - 1)
+    return [s + "0" for s in strings_with_1]
 
+def generate_strings_ending_with_1(length: int) -> list[str]:
+    if length == 1:
+        return ["1"]
+    strings_with_0 = generate_strings_ending_with_0(length - 1)
+    strings_with_1 = generate_strings_ending_with_1(length - 1)
+    return [s + "1" for s in strings_with_0 + strings_with_1]
 
 def generate_strings(length: int) -> list[str]:
     """Возвращает строки заданной длины, состоящие из 0 и 1, где никакие
@@ -21,23 +32,9 @@ def generate_strings(length: int) -> list[str]:
     числом.
     :return: Список строк.
     """
-    if(isinstance(length, bool)):
+    if isinstance(length, bool) or not isinstance(length, int) or length <= 0:
         raise ValueError(STR_LENGTH_ERROR_MSG)
-    if not isinstance(length, int) or length <= 0:
-        raise ValueError(STR_LENGTH_ERROR_MSG)
-
-    if length == 1:
-        return ["0", "1"]
-
-    prev = generate_strings(length - 1)
-    result = []
-    for s in prev:
-        if s[-1] == "0":
-            result.append(s + "1")
-        else:
-            result.append(s + "0")
-            result.append(s + "1")
-    return result
+    return generate_strings_ending_with_0(length) + generate_strings_ending_with_1(length)
 
 def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
     """Вычисляет биномиальный коэффициент из n по k.
@@ -66,12 +63,17 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
         return binomial_coefficient(n - 1, k - 1) + binomial_coefficient(n - 1, k)
     else:
         """ Итеративный способ """
-        k = min(k, n - k)
-        c = 1
-        for i in range(k):
-            c = c * (n - i) // (i + 1)
-        return c
-
+        numerator = factorial(n)
+        denominator = factorial(k) * factorial(n - k)
+        return numerator // denominator
+    
+def factorial(n: int) -> int:
+    if n == 0 or n == 1:
+        return 1
+    result = 1
+    for i in range(2, n + 1):
+        result *= i
+    return result
 
 def main():
     n = 10
