@@ -32,6 +32,20 @@ def validate_n_and_k(n: int, k: int):
     if n < k:
         raise ValueError(N_LESS_THAN_K_ERROR_MSG)
 
+def a(n):
+    if n == 1:
+        return 0
+    return b(n - 1) + c(n - 1)
+
+def b(n):
+    if n == 1:
+        return 1
+    return a(n - 1) + c(n - 1)
+
+def c(n):
+    if n == 1:
+        return 1
+    return a(n - 1) + b(n - 1)
 
 def get_triangle_path_count(length: int) -> int:
     """Вычисляет количество замкнутых маршрутов заданной длины между тремя
@@ -44,23 +58,7 @@ def get_triangle_path_count(length: int) -> int:
     """
     validate_length(length)
 
-    def a(n):
-        if n == 0:
-            return 1
-        return b(n - 1) + c(n - 1)
-
-    def b(n):
-        if n == 0:
-            return 0
-        return a(n - 1) + c(n - 1)
-
-    def c(n):
-        if n == 0:
-            return 0
-        return a(n - 1) + b(n - 1)
-
     return a(length)
-
 
 def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
     """Вычисляет биномиальный коэффициент из n по k.
@@ -85,7 +83,6 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
                 c[j] += c[j - 1]
         return c[k]
 
-
 def main():
     try:
         n = 10
@@ -101,4 +98,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
