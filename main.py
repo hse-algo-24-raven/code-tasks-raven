@@ -44,23 +44,17 @@ def get_triangle_path_count(length: int) -> int:
 def a(length: int) -> int:
     if length == 1:
         return 0
-    if length == 2:
-        return 2
     return b(length - 1) + c(length - 1)
 
 
 def b(length: int) -> int:
     if length == 1:
         return 1
-    if length == 2:
-        return 1
     return a(length - 1) + c(length - 1)
 
 
 def c(length: int) -> int:
     if length == 1:
-        return 1
-    if length == 2:
         return 1
     return a(length - 1) + b(length - 1)
 
@@ -87,7 +81,7 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
 def binomial_coefficient_rec(n: int, k: int) -> int:
     if k == 0 or k == n:
         return 1
-    return binomial_coefficient_rec(n - 1, k) + binomial_coefficient_rec(n - 1, k - 1)
+    return (n * binomial_coefficient_rec(n - 1, k - 1)) // k
 
 
 def binomial_coefficient_iter(n: int, k: int) -> int:
