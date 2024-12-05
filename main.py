@@ -15,15 +15,11 @@ def generate_strings_end_1(n: int) -> list[str]:
     """Возвращает строки длиной n, которые заканчиваются на 1"""
     if n == 1:
         return ["1"]
-    if n == 2:
-        return ["11", "01"]
     return [s + "1" for s in (generate_strings_end_1(n - 1) + generate_strings_end_0(n - 1))]
 def generate_strings_end_0(n: int) -> list[str]:
     """Возвращает строки длиной n, которые заканчиваются на 0"""
     if n == 1:
         return ["0"]
-    if n == 2:
-        return ["10"]
     return [s + "0" for s in generate_strings_end_1(n - 1)]
 
 
