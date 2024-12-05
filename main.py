@@ -62,18 +62,15 @@ def binomial_coefficient(n: int, k: int, use_rec=False) -> int:
             return 1
         return binomial_coefficient(n - 1, k - 1) + binomial_coefficient(n - 1, k)
     else:
-        """ Итеративный способ """
-        numerator = factorial(n)
-        denominator = factorial(k) * factorial(n - k)
-        return numerator // denominator
-    
-def factorial(n: int) -> int:
-    if n == 0 or n == 1:
-        return 1
-    result = 1
-    for i in range(2, n + 1):
-        result *= i
-    return result
+        iter = [[0] * (k + 1) for i in range(n + 1)]
+        for i in range(n + 1):
+            iter[i][0] = 1
+        for i in range(1, k + 1):
+            iter[i][i] = 1
+        for i in range(1, n + 1):
+            for j in range(1, k + 1):
+                iter[i][j] = iter[i - 1][j] + iter[i - 1][j - 1]
+        return iter[n][k]
 
 def main():
     n = 10
