@@ -46,52 +46,57 @@ def get_invest_distribution(
 
             level_max = 0
             for level in range(idx_row + 1):
-                prev_value = extended_result_matrix[level][idx_col - 1]
-                cur_value = extended_profit_matrix[idx_row - level][idx_col]
+                prev_profit = extended_result_matrix[level][idx_col - 1]
+                cur_profit = extended_profit_matrix[idx_row - level][idx_col]
 
-                level_max = max(level_max, prev_value + cur_value)
+                level_max = max(level_max, prev_profit + cur_profit)
 
             extended_result_matrix[idx_row][idx_col] = level_max
     result_profit = extended_result_matrix[-1][-1]
 
-    distribution_list = []
-    remaining_parts_money = parts_money
-    balance = result_profit
-    extended_remaining_profit_matrix = [[0] * (amount_projects + 1)]
-    extended_remaining_profit_matrix += [[0] + [col for col in row] for row in profit_matrix]
-
-    for idx_col in range(amount_projects, 0, -1):
-        extended_remaining_profit_matrix[0][idx_col] = (
-            extended_result_matrix)[parts_money - (amount_projects - idx_col)][idx_col - 1]
-    idx_col = amount_projects
-    idx_row = parts_money
-    while remaining_parts_money > 0:
-
-        cur_level_max = 0
-        remaining_balance_max = 0
-        profits = [profit[idx_col - 1] for profit in extended_result_matrix[:idx_row + 1]]
-        for level in range(idx_row + 1):
-
-            cur_waste = extended_remaining_profit_matrix[level][idx_col]
-            cur_balance = balance - cur_waste
-            if cur_balance in profits and cur_balance > remaining_balance_max:
-                remaining_balance_max = cur_balance
-                cur_level_max = level
-        remaining_parts_money -= cur_level_max
-        balance -= (balance - remaining_balance_max)
-        distribution_list.append(cur_level_max)
-        idx_col -= 1
-        idx_row = remaining_parts_money
-
-    while len(distribution_list) < amount_projects:
-        distribution_list.append(0)
-    distribution_list = distribution_list[::-1]
+    distribution_list = __get_distribution(profit_matrix, extended_result_matrix)
 
     result_distribution = {}
     result_distribution[PROFIT] = result_profit
     result_distribution[DISTRIBUTION] = distribution_list
     return result_distribution
 
+
+def __get_distribution(
+        profit_matrix: list[list[int]],
+        extended_result_matrix: list[list[int]]) -> list[int]:
+    """
+    Нахождение разделения инвестиций для максимальной прибыли
+
+    :param profit_matrix: Исходная матрица с прибылью
+    :param extended_result_matrix: Полученная расширенная матрица с резульатами
+    :return: Список значений - количество частей от общей суммы
+    """
+
+    amount_projects = len(profit_matrix[0])
+    parts_money = len(profit_matrix)
+    distribution_list = [0] * amount_projects
+    remaining_parts_money = parts_money
+    balance = extended_result_matrix[-1][-1]
+
+    extended_remaining_profit_matrix = [[0] * (amount_projects + 1)]
+    extended_remaining_profit_matrix += [[0] + row[:] for row in profit_matrix]
+
+    for idx_col in range(amount_projects, 0, -1):
+        level_max = 0
+        for level in range(remaining_parts_money + 1):
+
+            prev_balance = extended_result_matrix[remaining_parts_money - level][idx_col - 1]
+            cur_profit = extended_remaining_profit_matrix[level][idx_col]
+            if prev_balance + cur_profit == balance:
+                level_max = level
+                break
+
+        distribution_list[idx_col  - 1] = level_max
+        remaining_parts_money -= level_max
+        balance -= profit_matrix[level_max - 1][idx_col  - 1] if level_max > 0 else 0
+
+    return distribution_list
 
 
 def __validate_profit(matrix: list[list[int]]) -> None:
@@ -137,13 +142,11 @@ def __validate_profit(matrix: list[list[int]]) -> None:
 
 
 def main():
-    profit_matrix = [
-        [15, 18, 16, 17],
-        [20, 22, 23, 19],
-        [26, 28, 27, 25],
-        [34, 33, 29, 31],
-        [40, 39, 41, 37],
-    ]
+    profit_matrix = [[5, 7, 2, 10],
+                     [9, 8, 4, 15],
+                     [11, 10, 5, 16],
+                     [12, 12, 8, 17],
+                     [14, 15, 9, 18]]
     print(get_invest_distribution(profit_matrix))
 
 
