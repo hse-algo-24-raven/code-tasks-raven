@@ -14,8 +14,8 @@ def get_min_cost_path(
 
     if len(price_table) == 1 and len(price_table[0]) == 1 and price_table[0][0] is None:
         return {
-            COST: "None",
-            PATH: "None"
+            COST: None,
+            PATH: None
         }
 
     row_len = len(price_table[0])
