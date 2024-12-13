@@ -5,19 +5,18 @@ PARAM_ERR_MSG = (
     "Таблица цен не является прямоугольной матрицей с " "числовыми значениями"
 )
 
-
-def get_min_cost_path(
-    price_table: list[list[float | int | None]],
-) -> dict[str : float | None, str : list[tuple[int, int]] | None]:
+def is_table_empty(price_table):
     if not price_table or not price_table[0]:
         raise ValueError(PARAM_ERR_MSG)
 
+def is_only_elem_none(price_table):
     if len(price_table) == 1 and len(price_table[0]) == 1 and price_table[0][0] is None:
         return {
             COST: None,
             PATH: None
         }
 
+def validate_elems_on_price_table(price_table):
     row_len = len(price_table[0])
     for row in price_table:
         if len(row) != row_len:
@@ -26,45 +25,59 @@ def get_min_cost_path(
             if elem is not None and not isinstance(elem, (int, float)):
                 raise ValueError(PARAM_ERR_MSG)
 
+def is_first_or_last_elems_none(price_table):
     rows = len(price_table)
     cols = len(price_table[0])
-
     if price_table[0][0] is None or price_table[rows - 1][cols - 1] is None:
         raise ValueError(PARAM_ERR_MSG)
 
-    dp = [[float(INF)] * cols for i in range(rows)]
-    dp[0][0] = price_table[0][0]
+def get_min_cost_path(
+    price_table: list[list[float | int | None]],
+) -> dict[str : float | None, str : list[tuple[int, int]] | None]:
+    is_table_empty(price_table)
 
-    for i in range(rows):
-        for j in range(cols):
-            if price_table[i][j] is None:
+    is_only_elem_none(price_table)
+
+    validate_elems_on_price_table(price_table)
+
+    rows = len(price_table)
+    cols = len(price_table[0])
+
+    is_first_or_last_elems_none(price_table)
+
+    dynamic_price_table = [[INF] * cols for row in range(rows)]
+    dynamic_price_table[0][0] = price_table[0][0]
+
+    for row in range(rows):
+        for col in range(cols):
+            if price_table[row][col] is None:
                 continue
 
-            if i > 0 and price_table[i - 1][j] is not None:
-                dp[i][j] = min(dp[i][j], dp[i - 1][j] + price_table[i][j])
+            if row > 0 and price_table[row - 1][col] is not None:
+                dynamic_price_table[row][col] = min(dynamic_price_table[row][col], dynamic_price_table[row - 1][col] + price_table[row][col])
 
-            if j > 0 and price_table[i][j - 1] is not None:
-                dp[i][j] = min(dp[i][j], dp[i][j - 1] + price_table[i][j])
+            if col > 0 and price_table[row][col - 1] is not None:
+                dynamic_price_table[row][col] = min(dynamic_price_table[row][col], dynamic_price_table[row][col - 1] + price_table[row][col])
 
-    if dp[rows - 1][cols - 1] == float(INF):
+    if dynamic_price_table[rows - 1][cols - 1] == INF:
         return {
             COST: None,
             PATH: None
         }
 
     path = []
-    i, j = rows - 1, cols - 1
-    while i > 0 or j > 0:
-        path.append((i, j))
-        if i > 0 and dp[i][j] == dp[i - 1][j] + price_table[i][j]:
-            i -= 1
+    row, col = rows - 1, cols - 1
+    while row > 0 or col > 0:
+        path.append((row, col))
+        if row > 0 and dynamic_price_table[row][col] == dynamic_price_table[row - 1][col] + price_table[row][col]:
+            row -= 1
         else:
-            j -= 1
+            col -= 1
     path.append((0, 0))
     path.reverse()
 
     return {
-        COST: dp[rows - 1][cols - 1],
+        COST: dynamic_price_table[rows - 1][cols - 1],
         PATH: path
     }
 
