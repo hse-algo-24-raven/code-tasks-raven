@@ -11,10 +11,7 @@ def is_table_empty(price_table):
 
 def is_only_elem_none(price_table):
     if len(price_table) == 1 and len(price_table[0]) == 1 and price_table[0][0] is None:
-        return {
-            COST: None,
-            PATH: None
-        }
+        return True
 
 def validate_elems_on_price_table(price_table):
     row_len = len(price_table[0])
@@ -36,7 +33,11 @@ def get_min_cost_path(
 ) -> dict[str : float | None, str : list[tuple[int, int]] | None]:
     is_table_empty(price_table)
 
-    is_only_elem_none(price_table)
+    if is_only_elem_none(price_table):
+        return {
+            COST: None,
+            PATH: None
+        }
 
     validate_elems_on_price_table(price_table)
 
